@@ -1,0 +1,31 @@
+kind: project
+metadata:
+  name: test-prj2
+  created: '2023-09-28T13:31:09.968359'
+spec:
+  functions:
+  - url: handler.py
+    name: func
+    kind: job
+    image: mlrun/mlrun
+    handler: handler
+    with_repo: true
+  workflows:
+  - code: "import mlrun\nfrom kfp import dsl\nfrom mlrun.model import HyperParamOptions\n\
+      \nfrom mlrun import (\n    build_function,\n    deploy_function,\n    import_function,\n\
+      \    run_function,\n)\n\ndef kfpipeline():\n    \n\n    step1 = run_function(\"\
+      func\", name=\"step1\", inputs= {\"param1\" : 1, \"param2\" : 2}, outputs=[\"\
+      key\"])\n    \n    step2 = run_function(\"func\", name=\"step2\", inputs= {\"\
+      param1\" : step1.outputs[\"key\"], \"param2\" : 2}, outputs=[\"key\"])\n"
+    name: main
+  artifacts: []
+  conda: ''
+  source: git://github.com/EdmondIguazio/mlrunce-repo.git#main
+  load_source_on_run: true
+  desired_state: online
+  build:
+    commands: []
+    requirements: []
+  custom_packagers: []
+status:
+  state: online
